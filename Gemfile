@@ -30,6 +30,8 @@ gem 'cancancan'
 gem 'draper'
 gem 'pundit'
 gem 'sassc-rails'
+gem 'ransack'
+
 
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
