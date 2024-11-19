@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_14_200749) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_14_225615) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -69,15 +69,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_200749) do
     t.index ["customer_id"], name: "index_orders_on_customer_id"
   end
 
-  create_table "product_categories", force: :cascade do |t|
-    t.integer "product_id", null: false
-    t.integer "category_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["category_id"], name: "index_product_categories_on_category_id"
-    t.index ["product_id"], name: "index_product_categories_on_product_id"
-  end
-
   create_table "products", force: :cascade do |t|
     t.string "product_name"
     t.string "brand"
@@ -86,10 +77,11 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_200749) do
     t.text "ingredients"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "category_id", null: false
+    t.index ["category_id"], name: "index_products_on_category_id"
   end
 
   add_foreign_key "carts", "customers"
   add_foreign_key "orders", "customers"
-  add_foreign_key "product_categories", "categories"
-  add_foreign_key "product_categories", "products"
+  add_foreign_key "products", "categories"
 end

@@ -14,7 +14,6 @@ require "csv"
 
 Category.delete_all
 Product.delete_all
-ProductCategory.delete_all
 
 # Load CSV file 
 filename = Rails.root.join("db/cosmetic_p.csv")
@@ -23,25 +22,30 @@ products = CSV.parse(csv_data, headers: true, encoding: "utf-8")
 
 
 products.each do |product|
-    # Create new product
-    new_product = Product.create(
-        product_name: product["name"],
-        brand: product["brand"],
-        price: product["price"].to_d,
-        ranking: product["rank"].to_d,
-        ingredients: product["ingredients"]
-    )
+    category = Category.find_or_create_by(category_type: product["Label"])
 
-    # Create or find associated category
-    category_name = product["Label"]
-    category = Category.find_or_create_by(category_type: category_name)
+    if category.valid?
+        # Create new product
+            new_product = Product.create(
+            product_name: product["name"],
+            brand: product["brand"],
+            price: product["price"].to_d,
+            ranking: product["rank"].to_d,
+            ingredients: product["ingredients"],
+            category_id: category.id
+        )
+        unless new_product&.valid?
+            puts "Unable to create product: #{product['category']}"
+            puts new_product.errors.full_messages
 
-    # Create association for ProductCategory
-    ProductCategory.create(product: new_product, category: category)
+            next
+        end
+    else
+        puts "This Category has errors: #{product['Label']}"
+    end
 end
 
 puts "There are #{Category.count} Categories"
 puts "There are #{Product.count} Products"
-puts "There are #{ProductCategory.count} ProductCategories"
 
 
