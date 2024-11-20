@@ -1,3 +1,11 @@
+<%= form_tag products_path, :method => 'get' do %>
+  <%= text_field_tag :keywords, params[:keywords], placeholder: "Search for product..." %>
+
+  <%= collection_select :category, :id,  @categories, :id, :category_type, { include_blank: 'Select Category' } %>
+
+  <%= submit_tag "Search"%>
+<% end %>
+
 <div class="columns is-multiline">
     <% @products.each do |product| %>
       <%= render partial: 'product', locals: { product: product, show_link: true } %>

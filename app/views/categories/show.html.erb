@@ -1,1 +1,9 @@
-<p><%= @category.category_description %></p>
+<h1 class="title is-2 has-text-black"><%= @category.category_type %></h1>
+
+<p class="has-text-black"><%= @category.category_description %></p>
+
+<div class="content">
+    <% @category.products.each do |product|%>
+        <li><%= link_to product.product_name, product %></li>
+    <% end %>
+</div>
