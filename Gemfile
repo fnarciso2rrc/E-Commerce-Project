@@ -23,6 +23,7 @@ gem "jbuilder"
 # gem "kredis"
 
 gem 'activeadmin'
+gem 'spring-watcher-listen'
 
 # Plus integrations with:
 gem 'devise'

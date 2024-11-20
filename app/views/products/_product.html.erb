@@ -1,27 +1,36 @@
-<div id="<%= dom_id product %>">
-  <p>
-    <strong>Product name:</strong>
-    <%= product.product_name %>
-  </p>
+    <div class="column is-one-third">
+    <div class="cell">
+        <div class="card">
+            <div class="card-image">
+                <figure class="image is-4by3">
+                    <img
+                        src="https://bulma.io/assets/images/placeholders/1280x960.png"
+                        alt="Placeholder image"
+                    />
+                </figure>
+            </div>
 
-  <p>
-    <strong>Brand:</strong>
-    <%= product.brand %>
-  </p>
+            <% if controller_name == "products" && action_name == "index" %>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-content">
+                            <p class="title is-4">
+                                <% if show_link %>
+                                    <%= link_to product.product_name, product %> <!-- Link on the index page -->
+                                <% else %>
+                                    <%= product.product_name %> <!-- Plain text on the show page -->
+                                <% end %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            <% end %>
 
-  <p>
-    <strong>Price:</strong>
-    <%= product.price %>
-  </p>
-
-  <p>
-    <strong>Ranking:</strong>
-    <%= product.ranking %>
-  </p>
-
-  <p>
-    <strong>Ingredients:</strong>
-    <%= product.ingredients %>
-  </p>
-
+            <footer class="card-footer">
+                <p class="card-footer-item">
+                    <%= number_to_currency product.price %>
+                </p>
+            </footer>
+        </div>
+    </div>
 </div>

@@ -1,10 +1,25 @@
-<p style="color: green"><%= notice %></p>
+<div class="columns">
+    <%= render partial: 'product', locals: { product: @product, show_link: false } %>
+    <div class="column is-two-thirds">
+        <span class="has-text-grey-dark">
+            <%= @product.brand %>
+        </span>
 
-<%= render @product %>
+        <h1 class="title is-2 has-text-black"><%= @product.product_name %></h1>
 
-<div>
-  <%= link_to "Edit this product", edit_product_path(@product) %> |
-  <%= link_to "Back to products", products_path %>
+        <p class="has-text-grey">Category: <%= link_to @product.category.category_type, category_path(@product.category) %></p>
 
-  <%= button_to "Destroy this product", @product, method: :delete %>
+        <p class="has-text-grey">Ranking: <%= @product.ranking %> / 5</p>
+
+        <article class="message">
+            <div class="message-header">
+                <p>Ingredients</p>
+                <button class="delete" aria-label="delete"></button>
+            </div>
+            <div class="message-body">
+                <%= @product.ingredients %>
+            </div>
+        </article>
+    </div>
 </div>
+

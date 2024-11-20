@@ -15,9 +15,21 @@
     <link rel="apple-touch-icon" href="/icon.png">
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
+    >
+
   </head>
 
   <body>
-    <%= yield %>
+    <section class="section">
+      <div class="container">
+        <header>
+          <h1 class="title is-1"><%= link_to 'SkinNest', root_path %></h1>
+        </header>
+        <%= yield %>
+      </div>
+    </section>
   </body>
 </html>
