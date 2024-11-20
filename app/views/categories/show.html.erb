@@ -1,16 +1,1 @@
-<p style="color: green"><%= notice %></p>
-
-<%= render @category %>
-
-<div>
-  <h3>Products in this category</h3>
-  <% @category.products.each do |product| %>
-    <p>
-      <%= link_to product.product_name, product_path(product) %>
-    </p>
-  <% end %>
-</div>
-
-<div>
-  <%= link_to "Back to categories", categories_path %>
-</div>
+<p><%= @category.category_description %></p>
