@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :products
   resources :customers
 
+  resources :cart_items
+
   root to: "products#index"
 
 
