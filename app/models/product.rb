@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
     belongs_to :category
+    has_many :cart_items
 
     validates :product_name, :brand, :price, :ingredients, presence: true
     validates :price, numericality: { greater_than_or_equal_to: 0.01 }
