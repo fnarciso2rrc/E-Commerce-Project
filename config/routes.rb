@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  resources :carts
   resources :orders
   resources :categories
   resources :products
