@@ -75,9 +75,13 @@
             </div>
 
             <div class="navbar-end">
-              <a class="navbar-item">
-                <%= render 'layouts/cart' %>
-              </a>
+              <div class="navbar-end">
+                <a class="navbar-item">
+                  <li class="active cart">
+                      <%= render 'layouts/cart' %>
+                  </li>
+                </a>
+              </div>
             </div>
           </div>
         </nav>
