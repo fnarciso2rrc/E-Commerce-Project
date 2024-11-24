@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  # get "users/edit"
+  get "home/index"
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   resources :categories
@@ -8,7 +13,7 @@ Rails.application.routes.draw do
   resources :cart_items
   resources :carts, only: [:show]
 
-  root to: "products#index"
+  root to: "home#index"
 
 
 
