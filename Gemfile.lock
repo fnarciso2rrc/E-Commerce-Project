@@ -383,6 +383,7 @@ DEPENDENCIES
   error_highlight (>= 0.4.0)
   importmap-rails
   jbuilder
+  listen (~> 3.0)
   puma (>= 5.0)
   pundit
   rails (~> 7.2.1)

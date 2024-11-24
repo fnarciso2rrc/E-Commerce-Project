@@ -9,7 +9,7 @@ class ProductsController < ApplicationController
     keywords = params[:keywords]
     category_id = params.dig(:category, :id)
 
-    @products = Product.all
+    @products = Product.limit(50)
 
     if keywords.present?
       @products = @products.where("product_name LIKE ?", "%#{keywords}%")

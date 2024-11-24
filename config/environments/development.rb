@@ -12,6 +12,7 @@ Rails.application.configure do
   config.eager_load = false
   config.cache_classes = false
   config.reload_classes_only_on_change = true
+  config.file_watcher = ActiveSupport::FileUpdateChecker
 
 
 
