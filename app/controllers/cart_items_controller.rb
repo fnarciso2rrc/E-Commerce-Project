@@ -6,6 +6,11 @@ class CartItemsController < ApplicationController
         @cart = current_order
         @cart_item = @cart.cart_items.new(cart_item_params)
         @cart.save
+
+        # if @cart_item.save
+        #     @cart.save # Save the cart to update the subtotal
+        #   end
+
         session[:cart_id] = @cart.id
     end
 
@@ -14,6 +19,7 @@ class CartItemsController < ApplicationController
         @cart_item = @cart.cart_items.find(params[:id])
         @cart_item.update(cart_item_params)
         @cart_items = @cart.cart_items
+        @cart.save
     end
 
     def destroy
@@ -21,6 +27,7 @@ class CartItemsController < ApplicationController
         @cart_item = @cart.cart_items.find(params[:id])
         @cart_item.destroy
         @cart_items = @cart.cart_items
+        @cart.save
     end
 
     private
