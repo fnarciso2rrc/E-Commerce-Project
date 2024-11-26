@@ -21,18 +21,23 @@
             </div>
         </article>
 
-        <%= form_for(@cart_item, remote: true) do |f| %>
-            <%= f.hidden_field :product_id, value: @product.id %>
+        <% if current_user %>
+            <%= form_for(@cart_item, remote: true) do |f| %>
+                <%= f.hidden_field :product_id, value: @product.id %>
 
-            <div class="field has-addons">
-                <div class="select is-small">
-                <%= f.select :quantity, (1..10).to_a, { selected: @cart_item.quantity.to_i }, { class: 'select is-small' } %>
+                <div class="field has-addons">
+                    <div class="select is-small">
+                    <%= f.select :quantity, (1..10).to_a, { selected: @cart_item.quantity.to_i }, { class: 'select is-small' } %>
+                    </div>
+                    <div class="control">
+                    <%= f.submit "Add", class: 'button is-primary is-small' %>
+                    </div>
                 </div>
-                <div class="control">
-                <%= f.submit "Add", class: 'button is-primary is-small' %>
-                </div>
-            </div>
+            <% end %>
+        <% else %>
+          <%= link_to 'Log in to add to cart', new_user_session_path, class: "button is-primary is-small" %>
         <% end %>
+
     </div> 
 </div>
 

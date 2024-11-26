@@ -40,9 +40,15 @@
           </div>
 
           <div class="navbar-end">
+          <% if current_order && current_order.id.present? %>
             <%= link_to cart_path(current_order), class: "navbar-item" do %>
               <i class="lni lni-cart-1 has-text-light" style="font-size: 30px;"></i>
             <% end %>
+          <% else %>
+              <%= link_to new_user_session_path, class: "navbar-item" do %>
+                <i class="lni lni-cart-1 has-text-light" style="font-size: 30px;"></i>
+              <% end %>
+          <% end %>
           </div>
       </div>
     </nav>

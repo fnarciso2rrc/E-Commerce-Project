@@ -3,7 +3,8 @@ class ProductsController < ApplicationController
   # GET /products or /products.json
   def index
     @categories = Category.all
-    @cart_item = current_order.cart_items.new
+    set_cart_item
+
 
     keywords = params[:keywords]
     category_id = params.dig(:category, :id)
@@ -22,13 +23,22 @@ class ProductsController < ApplicationController
   # GET /products/1 or /products/1.json
   def show
     @product = Product.find(params[:id])
-    @cart_item = current_order.cart_items.new
+    set_cart_item
+
 
   end
 
   private
   def product_params
     params.require(:products).permit(:product_name, :price)
+  end
+
+  def set_cart_item
+    if current_user
+      @cart_item = current_order.cart_items.new
+    else
+      @cart_item = nil
+    end
   end
 
 end

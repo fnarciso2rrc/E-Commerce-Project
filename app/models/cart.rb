@@ -1,5 +1,6 @@
 class Cart < ApplicationRecord
     has_many :cart_items
+    belongs_to :user, optional: true
     before_save :set_subtotal
 
     def subtotal
