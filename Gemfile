@@ -34,6 +34,7 @@ gem 'draper'
 gem 'pundit'
 gem 'sassc-rails'
 gem 'ransack'
+gem 'stripe'
 
 
 
