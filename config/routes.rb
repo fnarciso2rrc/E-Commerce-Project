@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   }
 
   scope "/checkout" do 
+    get "shipping_information", to: "checkout#shipping_information", as: "checkout_shipping_information"
     post "create", to: "checkout#create", as: "checkout_create"
     get "success", to: "checkout#success", as: "checkout_success"
     get "cancel", to: "checkout#cancel", as: "checkout_cancel"

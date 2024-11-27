@@ -1,0 +1,28 @@
+<h1 class="title is-1">Shipping Information</h1>
+
+<%= form_with url: checkout_create_path, method: :post, data: { turbo: false } do |form|%>
+    <div>
+        <%= form.label :street_address, "Street Address" %><br />
+        <%= form.text_field :street_address, value: @shipping_address[:street_address], required: true %>
+    </div>
+
+    <div>
+        <%= form.label :city, "City" %><br />
+        <%= form.text_field :city, value: @shipping_address[:city], required: true %>
+    </div>
+
+    <div>
+        <%= form.label :province, "Province" %><br />
+        <%= form.select :province, 
+            options_from_collection_for_select(@provinces, :id, :province_name, @shipping_address[:province]),
+            { prompt: "Select your province" }, 
+            required: true %>
+    </div>
+
+      <div>
+        <%= form.label :postal_code, "Postal Code" %><br />
+        <%= form.text_field :postal_code, value: @shipping_address[:postal_code], required: true %>
+    </div>
+
+    <%= button_tag "Pay now" %>
+<% end %>

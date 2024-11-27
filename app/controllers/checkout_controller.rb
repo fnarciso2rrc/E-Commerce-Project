@@ -17,15 +17,16 @@ class CheckoutController < ApplicationController
                         currency: "cad",
                         product_data: {
                             name: cart_item.product.product_name,
-                            category: cart_item.product.category.category_type,
+                            description: "Category: #{cart_item.product.category.category_type}",
                         },
-                        unit_amount: cart_item.product.price,
+                        unit_amount: (cart_item.product.price * 100).to_i,
                     },
                     quantity: cart_item.quantity
             }
+        end
 
 
-        total_price = @cart.cart_items.sum { |item| item.product.price * item.quantity }
+        #total_price = @cart.cart_items.sum { |item| item.product.price * item.quantity }
         
         @session = Stripe::Checkout::Session.create(
             payment_method_types: ["card"],
@@ -33,10 +34,25 @@ class CheckoutController < ApplicationController
             cancel_url: checkout_cancel_url,
             mode: "payment",
             line_items: line_items,
-            total_amount: total_price
+            
+            #total_amount: total_price
         )
 
+        Rails.logger.info "Redirecting to: #{@session.url}"
+
         redirect_to @session.url, allow_other_host: true
+    end
+
+    def shipping_information
+        @shipping_address = {
+            street_address: current_user.street_address || "",
+            city: current_user.city || "",
+            province: current_user.province_id || nil,
+            postal_code: current_user.postal_code || "",
+        }
+
+        @provinces = Province.all
+    end
 
 
     def success
