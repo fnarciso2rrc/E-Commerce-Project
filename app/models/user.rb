@@ -6,4 +6,5 @@ class User < ApplicationRecord
 
   belongs_to :province, optional: true
   has_one :cart
+  has_many :orders
 end

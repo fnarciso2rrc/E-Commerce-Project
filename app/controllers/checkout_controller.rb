@@ -13,6 +13,15 @@ class CheckoutController < ApplicationController
 
         tax_rate = calculate_tax_rate
 
+        order = Order.create!(
+            user_id: current_user.id,
+            status: "pending",
+            total_amount: calculate_total(@cart, tax_rate),
+            subtotal_amount: calculate_subtotal(@cart),
+            tax_amount: calculate_tax_amount(@cart, tax_rate),
+            stripe_payment_id: nil
+        )
+
         line_items = @cart.cart_items.map do |cart_item|
             {
                     price_data: {
@@ -31,7 +40,7 @@ class CheckoutController < ApplicationController
         
         @session = Stripe::Checkout::Session.create(
             payment_method_types: ["card"],
-            success_url: checkout_success_url,
+            success_url: checkout_success_url(order_id: order.id) + "&session_id={CHECKOUT_SESSION_ID}",
             cancel_url: checkout_cancel_url,
             mode: "payment",
             line_items: line_items,
@@ -54,6 +63,19 @@ class CheckoutController < ApplicationController
 
 
     def success
+        order = Order.find(params[:order_id])
+
+        if params[:session_id].present?
+            order.update!(
+              status: "paid",
+              stripe_payment_id: params[:session_id]
+            )
+          else
+            flash[:alert] = "Payment was successful, but session ID is missing."
+          end
+
+        flash[:notice] = "Payment was successful. Thank you for your oder!"
+        redirect_to root_path
     end
 
     def cancel
@@ -73,6 +95,17 @@ class CheckoutController < ApplicationController
         end
 
         tax_rate
-        
+    end
+
+    def calculate_subtotal(cart)
+        cart.cart_items.sum { |item| item.product.price * item.quantity }
+    end
+
+    def calculate_tax_amount(cart, tax_rate)
+        calculate_subtotal(cart) * tax_rate
+    end
+
+    def calculate_total(cart, tax_rate)
+        calculate_subtotal(cart) + calculate_tax_amount(cart, tax_rate)
     end
 end
