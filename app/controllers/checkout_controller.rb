@@ -11,6 +11,8 @@ class CheckoutController < ApplicationController
             return
         end
 
+        tax_rate = calculate_tax_rate
+
         line_items = @cart.cart_items.map do |cart_item|
             {
                     price_data: {
@@ -19,14 +21,13 @@ class CheckoutController < ApplicationController
                             name: cart_item.product.product_name,
                             description: "Category: #{cart_item.product.category.category_type}",
                         },
-                        unit_amount: (cart_item.product.price * 100).to_i,
+                        unit_amount: (cart_item.product.price * 100 * (tax_rate + 1)).to_i,
                     },
                     quantity: cart_item.quantity
             }
         end
 
-
-        #total_price = @cart.cart_items.sum { |item| item.product.price * item.quantity }
+        # total = @cart.subtotal * (1 + tax_rate)
         
         @session = Stripe::Checkout::Session.create(
             payment_method_types: ["card"],
@@ -34,11 +35,8 @@ class CheckoutController < ApplicationController
             cancel_url: checkout_cancel_url,
             mode: "payment",
             line_items: line_items,
-            
-            #total_amount: total_price
+            #amount: (total * 100).to_i,
         )
-
-        Rails.logger.info "Redirecting to: #{@session.url}"
 
         redirect_to @session.url, allow_other_host: true
     end
@@ -56,27 +54,25 @@ class CheckoutController < ApplicationController
 
 
     def success
-
-        # @session = Stripe::Checkout::Session.create(
-        #     payment_method_types: ["card"],
-        #     success_url: checkout_success_url,
-        #     cancel_url: checkout_cancel_url,
-        #     mode: "payment",
-        #     line_items: [
-        #             price_data: {
-        #                 currency: "cad",
-        #                 product_data: {
-        #                     name: product.name,
-        #                     description: product.description,
-        #                 },
-        #                 unit_amount: product.price_cents,
-        #             },
-        #             quantity: 1
-        #     ]
-        # )
-        # redirect_to @session.url, allow_other_host: true
     end
 
     def cancel
+    end
+
+    private
+
+    def calculate_tax_rate
+        # Get users province
+        if current_user.province.present?
+            province = Province.find(current_user.province_id)
+            tax_rate = province.tax
+        else
+            form_province = params[:province]
+            province = Province.find(form_province)
+            tax_rate = province.tax
+        end
+
+        tax_rate
+        
     end
 end
