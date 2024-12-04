@@ -19,9 +19,9 @@ Rails.application.routes.draw do
   resources :categories
   resources :products
   resources :customers
-
   resources :cart_items
   resources :carts, only: [:show]
+  resources :orders
 
   root to: "home#index"
 

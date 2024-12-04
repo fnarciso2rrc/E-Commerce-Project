@@ -1,0 +1,17 @@
+<h1>My Orders</h1>
+
+<% if @orders.any? %>
+  <ul>
+    <% @orders.each do |order| %>
+      <li>
+        <h3>Order ID: <%= order.id %></h3>
+        <p>Status: <%= order.status %></p>
+        <p>Total Amount: <%= number_to_currency(order.total_amount) %></p>
+        <p>Date: <%= order.created_at.strftime("%B %d, %Y") %></p>
+        <%= link_to 'View Order Details', order_path(order.id) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no orders yet.</p>
+<% end %>
