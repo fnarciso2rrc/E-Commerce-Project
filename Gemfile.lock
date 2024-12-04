@@ -132,7 +132,7 @@ GEM
       request_store (>= 1.0)
       ruby2_keywords
     drb (2.2.1)
-    error_highlight (0.6.0)
+    error_highlight (0.7.0)
     erubi (1.13.0)
     ffi (1.17.0)
     formtastic (5.0.0)
