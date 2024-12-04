@@ -19,15 +19,55 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
     >
+    <link href="https://cdn.lineicons.com/5.0/lineicons.css" rel="stylesheet" />
+
 
   </head>
 
   <body>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+          <%= link_to root_path, class: "navbar-item" do %>
+            <h1 class="title">SkinNest</h1>
+          <% end %>
+      </div>
+
+      <div class="navbar-menu">
+          <div class="navbar-start">
+            <%= link_to "Shop", products_url, class: "navbar-item" %>
+
+            <%= link_to "Categories", categories_path, class: "navbar-item" %>
+          </div>
+
+          <div class="navbar-end">
+          <% if current_order && current_order.id.present? %>
+            <%= link_to cart_path(current_order), class: "navbar-item" do %>
+              <i class="lni lni-cart-1 has-text-light" style="font-size: 30px;"></i>
+            <% end %>
+          <% else %>
+              <%= link_to new_user_session_path, class: "navbar-item" do %>
+                <i class="lni lni-cart-1 has-text-light" style="font-size: 30px;"></i>
+              <% end %>
+          <% end %>
+          </div>
+      </div>
+    </nav>
+
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+    <div>
+      <% if user_signed_in? %>
+        <%= link_to "Profile", edit_user_registration_path %>
+        <%= button_to "Log out", destroy_user_session_path, method: :delete%>
+      <% else %>
+        <%= link_to "Login", new_user_session_path %>
+        <%= link_to "Sign Up", new_user_registration_path %>
+      <% end %>
+    </div>
+
     <section class="section">
       <div class="container">
-        <header>
-          <h1 class="title is-1"><%= link_to 'SkinNest', root_path %></h1>
-        </header>
         <%= yield %>
       </div>
     </section>

@@ -24,6 +24,8 @@ gem "jbuilder"
 
 gem 'activeadmin'
 gem 'spring-watcher-listen'
+gem 'listen', '~> 3.0'
+
 
 # Plus integrations with:
 gem 'devise'
@@ -32,6 +34,7 @@ gem 'draper'
 gem 'pundit'
 gem 'sassc-rails'
 gem 'ransack'
+gem 'stripe'
 
 
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_14_225615) do
+ActiveRecord::Schema[7.2].define(version: 2024_11_28_033607) do
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -37,11 +37,23 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_225615) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
-  create_table "carts", force: :cascade do |t|
-    t.integer "customer_id", null: false
+  create_table "cart_items", force: :cascade do |t|
+    t.integer "product_id"
+    t.integer "cart_id"
+    t.float "unit_price"
+    t.integer "quantity"
+    t.float "total_price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["customer_id"], name: "index_carts_on_customer_id"
+  end
+
+  create_table "carts", force: :cascade do |t|
+    t.float "subtotal"
+    t.float "total"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_carts_on_user_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -52,21 +64,27 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_225615) do
   end
 
   create_table "customers", force: :cascade do |t|
-    t.string "username"
     t.string "email"
     t.string "password"
-    t.string "address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "province_id"
+    t.string "street_address"
+    t.string "city"
+    t.string "postal_code"
+    t.index ["province_id"], name: "index_customers_on_province_id"
   end
 
   create_table "orders", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "status"
     t.decimal "total_amount"
-    t.date "order_date"
-    t.integer "customer_id", null: false
+    t.decimal "subtotal_amount"
+    t.decimal "tax_amount"
+    t.string "stripe_payment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["customer_id"], name: "index_orders_on_customer_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -81,7 +99,34 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_14_225615) do
     t.index ["category_id"], name: "index_products_on_category_id"
   end
 
-  add_foreign_key "carts", "customers"
-  add_foreign_key "orders", "customers"
+  create_table "provinces", force: :cascade do |t|
+    t.string "province_name"
+    t.string "alpha_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal "tax"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "street_address"
+    t.string "city"
+    t.string "postal_code"
+    t.integer "province_id"
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["province_id"], name: "index_users_on_province_id"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  end
+
+  add_foreign_key "carts", "users"
+  add_foreign_key "customers", "provinces"
+  add_foreign_key "orders", "users"
   add_foreign_key "products", "categories"
+  add_foreign_key "users", "provinces"
 end

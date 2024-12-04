@@ -1,13 +1,29 @@
 Rails.application.routes.draw do
+  # get "users/edit"
+  get "home/index"
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
+
+  scope "/checkout" do 
+    get "shipping_information", to: "checkout#shipping_information", as: "checkout_shipping_information"
+    post "create", to: "checkout#create", as: "checkout_create"
+    get "success", to: "checkout#success", as: "checkout_success"
+    get "cancel", to: "checkout#cancel", as: "checkout_cancel"
+    post "update_shipping_information", to: "checkout#update_shipping_information", as: "update_shipping_information"  # Add this line
+
+  end
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  resources :carts
-  resources :orders
   resources :categories
   resources :products
   resources :customers
 
-  root to: "products#index"
+  resources :cart_items
+  resources :carts, only: [:show]
+
+  root to: "home#index"
 
 
 
