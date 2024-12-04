@@ -6,7 +6,7 @@ class OrdersController < ApplicationController
     end
 
     def show
-        @order = Order.find_by(stripe_payment_id: params[:stripe_payment_id])
+        @order = Order.find(params[:id])
 
         if @order
             @order_items = @order.order_items.includes(:product)

@@ -74,9 +74,7 @@ class CheckoutController < ApplicationController
 
     def success
         # order = Order.find(params[:order_id])
-        session = Stripe::Checkout::Session.retrieve(params[:session_id])
-
-
+        
         # if params[:session_id].present?
         #     order.update!(
         #       status: "paid",
@@ -86,7 +84,9 @@ class CheckoutController < ApplicationController
         #     flash[:alert] = "Payment was successful, but session ID is missing."
         #   end
 
-        Order.create!(
+        session = Stripe::Checkout::Session.retrieve(params[:session_id])
+
+        order = Order.create!(
             user_id: session.metadata.user_id,
             status: "paid",
             total_amount: session.metadata.total_amount.to_f,
@@ -94,6 +94,18 @@ class CheckoutController < ApplicationController
             tax_amount: session.metadata.tax_amount.to_f,
             stripe_payment_id: params[:session_id]
         )
+
+        cart = current_user.cart
+        cart.cart_items.each do |cart_item|
+            OrderItem.create!(
+                order_id: order.id,
+                product_id: cart_item.product.id,
+                quantity: cart_item.quantity,
+                price: cart_item.product.price
+            )
+        end
+
+        cart.cart_items.destroy_all
 
         flash[:notice] = "Payment was successful. Thank you for your oder!"
         redirect_to root_path
